@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import domain.piece.stategy.Direction;
-import domain.team.Team;
+import domain.piece.Team;
 
 public class Location {
 	private static final List<Location> WHITE_TEAM_INITIAL_PAWN_LOCATIONS = Arrays.asList(

@@ -2,7 +2,7 @@ package domain.result;
 
 import java.util.Objects;
 
-import domain.team.Team;
+import domain.piece.Team;
 
 public class GameStatistic {
 	private final Team team;

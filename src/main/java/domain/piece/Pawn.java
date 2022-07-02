@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import domain.piece.stategy.PawnMoveStrategy;
-import domain.team.Team;
 
 public class Pawn extends Piece {
 	private static final char name = 'p';

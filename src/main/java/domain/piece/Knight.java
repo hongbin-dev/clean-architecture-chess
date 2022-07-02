@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import domain.piece.stategy.KnightMoveStrategy;
-import domain.team.Team;
 
 public class Knight extends Piece {
 	private static final char name = 'n';

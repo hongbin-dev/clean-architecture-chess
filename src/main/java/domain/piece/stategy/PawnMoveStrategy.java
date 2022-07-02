@@ -3,7 +3,7 @@ package domain.piece.stategy;
 import java.util.List;
 
 import domain.board.Location;
-import domain.team.Team;
+import domain.piece.Team;
 
 public class PawnMoveStrategy extends MoveStrategy {
 	private final List<Direction> pawnDirection;

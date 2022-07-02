@@ -1,33 +1,35 @@
 package controller;
 
-import domain.GameManager;
-import domain.board.Location;
-import domain.gamestate.GameState;
-import domain.piece.PieceFactory;
 import controller.command.FirstCommand;
 import controller.command.RunningCommand;
+import domain.game.ChessGame;
+import domain.board.Location;
+import domain.game.GameState;
+import domain.piece.PieceFactory;
 import view.InputView;
 import view.OutputView;
 
 public class ChessController {
 
-	private final GameManager gameManage = new GameManager(new PieceFactory().createPieces(), GameState.RUNNING_WHITE_TURN);
-
 	public void run() {
-		start();
-		running();
-		end();
+		var chessGame = new ChessGame(new PieceFactory().createPieces(), GameState.RUNNING_WHITE_TURN);
+
+		start(chessGame);
+		while (chessGame.isRunning()) {
+			running(chessGame);
+		}
 	}
 
-	private void start() {
+	private void start(ChessGame chessGame) {
 		OutputView.printInformation();
 
 		FirstCommand firstCommand = readFirstCommand();
 		if (firstCommand == FirstCommand.END) {
-			end();
+			chessGame.end();
+			return;
 		}
 
-		OutputView.printBoard(gameManage);
+		OutputView.printBoard(chessGame);
 	}
 
 	private FirstCommand readFirstCommand() {
@@ -39,32 +41,33 @@ public class ChessController {
 		}
 	}
 
-	private void running() {
-		RunningCommand runningCommand;
-		do {
-			runningCommand = readRunningCommand();
-			if (runningCommand.isMove()) {
-				move(runningCommand.getNowLocation(), runningCommand.getDestinationLocation());
-			}
-			if (runningCommand.isStatus()) {
-				status();
-			}
-		} while (gameManage.isRunning() && runningCommand.isNotEnd());
+	private void running(ChessGame chessGame) {
+		var runningCommand = readRunningCommand();
+
+		if (runningCommand.isMove()) {
+			move(runningCommand.getNowLocation(), runningCommand.getDestinationLocation(), chessGame);
+		}
+		if (runningCommand.isStatus()) {
+			status(chessGame);
+		}
+		if (readRunningCommand().isEnd()) {
+			chessGame.end();
+		}
 	}
 
-	private void move(String nowLocation, String destinationLocation) {
+	private void move(String nowLocation, String destinationLocation, ChessGame chessGame) {
 		try {
-			gameManage.movePiece(Location.of(nowLocation), Location.of(destinationLocation));
+			chessGame.movePiece(Location.of(nowLocation), Location.of(destinationLocation));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			running();
+			running(chessGame);
 			return;
 		}
-		OutputView.printBoard(gameManage);
+		OutputView.printBoard(chessGame);
 	}
 
-	private void status() {
-		OutputView.printStatus(gameManage.createStatistics());
+	private void status(ChessGame chessGame) {
+		OutputView.printStatus(chessGame.createStatistics());
 	}
 
 	private RunningCommand readRunningCommand() {
@@ -74,9 +77,5 @@ public class ChessController {
 			System.out.println(e.getMessage());
 			return readRunningCommand();
 		}
-	}
-
-	private void end() {
-		System.exit(1);
 	}
 }

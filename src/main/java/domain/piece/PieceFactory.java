@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import domain.board.Location;
-import domain.team.Team;
 
 public class PieceFactory {
 	public Map<Location, Piece> createPieces() {

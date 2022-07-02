@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import domain.team.Team;
+import domain.piece.Team;
 
 public enum Direction {
 	NORTH(0, 1),

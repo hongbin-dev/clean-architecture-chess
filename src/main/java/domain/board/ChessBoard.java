@@ -1,17 +1,16 @@
 package domain.board;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import domain.gamestate.GameState;
+import domain.game.GameState;
 import domain.piece.Piece;
-import domain.result.Score;
-import domain.team.Team;
+import domain.piece.Team;
 
 public class ChessBoard {
+
 	public static final int ROW_LENGTH = 8;
 	public static final int COLUMN_LENGTH = 8;
 	private static final int TEAM_LENGTH = 2;
@@ -20,6 +19,10 @@ public class ChessBoard {
 
 	public ChessBoard(Map<Location, Piece> pieces) {
 		Objects.requireNonNull(pieces, "피스 정보가 없습니다.");
+		if (!hasTwoKings(pieces)) {
+			throw new IllegalArgumentException("종료된 게임입니다");
+		}
+
 		this.board = pieces;
 	}
 
@@ -32,9 +35,9 @@ public class ChessBoard {
 	private void validateLocation(Location now, Location destination) {
 		Piece piece = board.get(now);
 
-		checkLocationSameTeam(piece, destination);
+		checkSameTeam(piece, destination);
 		if (piece.isNotJumper()) {
-			checkObstacleJumper(piece, now, destination);
+			checkObstacle(now, destination);
 		}
 		piece.checkStrategy(now, destination, existEnemyInLocation(destination, piece));
 	}
@@ -47,8 +50,9 @@ public class ChessBoard {
 		return destinationEnemy;
 	}
 
-	private void checkObstacleJumper(Piece piece, Location now, Location destination) {
+	private void checkObstacle(Location now, Location destination) {
 		boolean obstacle = false;
+		// 중간경로를 탐색하는 객체 구현
 		Location nextLocation = now.calculateNextLocation(destination, 1);
 		for (int weight = 2; weight <= 8 && nextLocation != destination; weight++) {
 			if (board.containsKey(nextLocation)) {
@@ -62,13 +66,13 @@ public class ChessBoard {
 		}
 	}
 
-	private void checkLocationSameTeam(Piece piece, Location destination) {
-		boolean sameTeam = false;
-		if (board.containsKey(destination)) {
-			Piece other = board.get(destination);
-			sameTeam = piece.isSameTeam(other);
+	private void checkSameTeam(Piece piece, Location destination) {
+		if (!board.containsKey(destination)) {
+			return;
 		}
-		if (sameTeam) {
+
+		Piece other = board.get(destination);
+		if (piece.isSameTeam(other)) {
 			throw new IllegalArgumentException("같은 팀으로 이동했습니다.");
 		}
 	}
@@ -79,40 +83,16 @@ public class ChessBoard {
 			.collect(Collectors.toMap(location -> location, board::get));
 	}
 
-	public Score calculateScore(Team team) {
-		Map<Location, Piece> teamPieces = giveMyPiece(team);
-
-		List<Location> sameTeamPawns = teamPieces.keySet().stream()
-			.filter(location -> board.get(location).isPawn())
-			.collect(Collectors.toList());
-
-		return new Score(new ArrayList<>(teamPieces.values()), getHalfScoreCount(sameTeamPawns));
-	}
-
-	private int getHalfScoreCount(List<Location> sameTeamPawns) {
-		int halfScorePawnCount = 0;
-
-		for (Location location : sameTeamPawns) {
-			int count = 0;
-			for (Location targetLocation : sameTeamPawns) {
-				if (targetLocation.isSameColumn(location)) {
-					count++;
-				}
-			}
-			if (count >= 2) {
-				halfScorePawnCount++;
-			}
-		}
-
-		return halfScorePawnCount;
-	}
-
-	public boolean hasTwoKings() {
-		long kingCount = board.values().stream()
+	private boolean hasTwoKings(Map<Location, Piece> pieces) {
+		long kingCount = pieces.values().stream()
 			.filter(Piece::isKing)
 			.count();
 
 		return kingCount == 2;
+	}
+
+	public boolean hasTwoKings() {
+		return hasTwoKings(board);
 	}
 
 	public boolean isNotPiece(Location now) {
@@ -129,9 +109,10 @@ public class ChessBoard {
 	}
 
 	public Team findWinner() {
-		List<Piece> kings = board.values().stream()
+		List<Piece> kings = board.values()
+			.stream()
 			.filter(Piece::isKing)
-			.collect(Collectors.toList());
+			.toList();
 
 		if (kings.size() == TEAM_LENGTH) {
 			throw new IllegalArgumentException("게임이 종료되지 않았습니다.");

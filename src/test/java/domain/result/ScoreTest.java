@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import domain.piece.Pawn;
 import domain.piece.Piece;
-import domain.team.Team;
+import domain.piece.Team;
 
 class ScoreTest {
 

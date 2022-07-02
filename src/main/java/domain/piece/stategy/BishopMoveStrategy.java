@@ -3,7 +3,7 @@ package domain.piece.stategy;
 import java.util.List;
 
 import domain.board.Location;
-import domain.team.Team;
+import domain.piece.Team;
 
 public class BishopMoveStrategy extends MoveStrategy {
 	private final List<Direction> bishopDirection = Direction.DIAGONAL_DIRECTION;

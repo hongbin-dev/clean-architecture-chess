@@ -1,4 +1,4 @@
-package domain.team;
+package domain.piece;
 
 import java.util.Arrays;
 

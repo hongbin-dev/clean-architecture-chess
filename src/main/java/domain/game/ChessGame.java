@@ -1,31 +1,24 @@
-package domain;
+package domain.game;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import domain.result.ChessCalculator;
 import domain.board.ChessBoard;
 import domain.board.Location;
-import domain.gamestate.GameState;
 import domain.piece.Piece;
-import domain.result.GameResult;
 import domain.result.GameStatistic;
-import domain.result.Score;
-import domain.team.Team;
+import domain.piece.Team;
 
-public class GameManager {
+public class ChessGame {
 	private final ChessBoard chessBoard;
 	private GameState gameState;
 
-	public GameManager(Map<Location, Piece> pieces, GameState gameState) {
+	public ChessGame(Map<Location, Piece> pieces, GameState gameState) {
 		Objects.requireNonNull(pieces, "pieces의 정보가 없습니다.");
 		this.chessBoard = new ChessBoard(pieces);
 		this.gameState = gameState;
-		// todo : 추가된 방어로직
-		if (!chessBoard.hasTwoKings()) {
-			this.gameState = GameState.END;
-		}
 	}
 
 	public boolean isRunning() {
@@ -55,15 +48,10 @@ public class GameManager {
 	}
 
 	public List<GameStatistic> createStatistics() {
-		Score blackTeamScore = chessBoard.calculateScore(Team.WHITE);
-		Score whiteTeamScore = chessBoard.calculateScore(Team.BLACK);
+		Map<Location, Piece> board = chessBoard.getBoard();
+		var calculator = new ChessCalculator(board);
 
-		List<GameStatistic> gameStatistics = new ArrayList<>();
-		gameStatistics.add(
-			new GameStatistic(Team.WHITE, whiteTeamScore, GameResult.findResult(whiteTeamScore, blackTeamScore)));
-		gameStatistics.add(
-			new GameStatistic(Team.BLACK, blackTeamScore, GameResult.findResult(blackTeamScore, whiteTeamScore)));
-		return gameStatistics;
+		return calculator.calculate();
 	}
 
 	public Team findWinner() {
@@ -74,7 +62,7 @@ public class GameManager {
 		return chessBoard.getBoard();
 	}
 
-	public GameState getGameState() {
-		return gameState;
+	public void end() {
+		gameState = GameState.END;
 	}
 }

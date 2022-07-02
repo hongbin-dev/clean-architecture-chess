@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import domain.piece.stategy.KingMoveStrategy;
-import domain.team.Team;
 
 public class King extends Piece {
 	private static final char name = 'k';

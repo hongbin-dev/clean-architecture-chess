@@ -2,7 +2,7 @@ package domain.piece.stategy;
 
 import java.util.Objects;
 import domain.board.Location;
-import domain.team.Team;
+import domain.piece.Team;
 
 public abstract class MoveStrategy {
 	protected final Team team;

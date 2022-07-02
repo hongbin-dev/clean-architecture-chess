@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import domain.piece.Team;
+
 class TeamTest {
 
 	@DisplayName("팀의 정보를 제대로 가져오는지 확인")

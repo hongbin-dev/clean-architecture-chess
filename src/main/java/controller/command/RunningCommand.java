@@ -73,4 +73,8 @@ public class RunningCommand {
 	public boolean isStatus() {
 		return command.equals(STATUS);
 	}
+
+	public boolean isEnd() {
+		return END.equals(command);
+	}
 }

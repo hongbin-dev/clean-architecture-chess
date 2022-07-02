@@ -3,7 +3,7 @@ package domain.piece.stategy;
 import java.util.List;
 
 import domain.board.Location;
-import domain.team.Team;
+import domain.piece.Team;
 
 public class QueenMoveStrategy extends MoveStrategy {
 	private final List<Direction> queenDirection = Direction.EVERY_DIRECTION;

@@ -1,8 +1,8 @@
-package domain.gamestate;
+package domain.game;
 
 import java.util.Arrays;
 
-import domain.team.Team;
+import domain.piece.Team;
 
 public enum GameState {
 	RUNNING_BLACK_TURN(true, Team.BLACK),
@@ -37,15 +37,6 @@ public enum GameState {
 			.findAny()
 			.orElseThrow(() -> new IllegalArgumentException("진행결과를 찾을 수 없습니다."));
 	}
-
-	public GameState findOpposingTeam() {
-		return Arrays.stream(values())
-			.filter(gameState -> gameState.gameRunning)
-			.filter(gameState -> gameState != this)
-			.findAny()
-			.orElseThrow(() -> new IllegalArgumentException("반대팀을 찾을 수 없습니다."));
-	}
-
 
 	public boolean isGameRunning() {
 		return gameRunning;

@@ -1,4 +1,4 @@
-package domain.gamestate;
+package domain.game;
 
 import static org.assertj.core.api.Assertions.*;
 

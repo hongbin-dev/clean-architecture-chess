@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import domain.board.Location;
 import domain.piece.stategy.MoveStrategy;
-import domain.team.Team;
 
 public abstract class Piece {
 	private final static Map<String, Piece> pieceCache = new HashMap<>();
