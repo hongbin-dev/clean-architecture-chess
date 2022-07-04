@@ -8,4 +8,9 @@ public class InputView {
 	public static String inputCommand() {
 		return SCANNER.nextLine();
 	}
+
+	public static String inputCommand(String text) {
+		System.out.println(text);
+		return inputCommand();
+	}
 }

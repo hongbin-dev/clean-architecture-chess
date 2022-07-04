@@ -62,6 +62,10 @@ public class ChessGame {
 		return chessBoard.getBoard();
 	}
 
+	public GameState getGameState() {
+		return gameState;
+	}
+
 	public void end() {
 		gameState = GameState.END;
 	}
