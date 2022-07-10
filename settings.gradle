@@ -1,2 +1,8 @@
 rootProject.name = 'architecture-study-chess'
+include 'chess-domain'
+include 'chess-application'
+include 'chess-web-adapter'
+include 'chess-port'
+include 'chess-persist-adapter'
+include 'chess-configuration'
 
