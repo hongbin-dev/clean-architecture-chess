@@ -2,10 +2,35 @@ package chess.domain.piece;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import chess.domain.board.Location;
 
 public class PieceFactory {
+	public static Optional<Piece> of(char symbol) {
+		var team = Team.of(Character.isUpperCase(symbol));
+
+		if (Character.toLowerCase(symbol) == 'k') {
+			return Optional.of(King.of(team));
+		}
+		if (Character.toLowerCase(symbol) == 'n') {
+			return Optional.of(Knight.of(team));
+		}
+		if (Character.toLowerCase(symbol) == 'r') {
+			return Optional.of(Rook.of(team));
+		}
+		if (Character.toLowerCase(symbol) == 'b') {
+			return Optional.of(Bishop.of(team));
+		}
+		if (Character.toLowerCase(symbol) == 'q') {
+			return Optional.of(Queen.of(team));
+		}
+		if (Character.toLowerCase(symbol) == 'p') {
+			return Optional.of(Pawn.of(team));
+		}
+		return Optional.empty();
+	}
+
 	public Map<Location, Piece> createPieces() {
 		Map<Location, Piece> pieces = new HashMap<>();
 

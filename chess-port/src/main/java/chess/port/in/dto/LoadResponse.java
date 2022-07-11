@@ -7,14 +7,7 @@ import java.util.Map;
 import chess.domain.board.Location;
 import chess.domain.game.ChessGame;
 
-public class LoadResponse {
-
-	// TODO 맵 제거 가능한지?
-	private final Map<String, String> data;
-
-	public LoadResponse(Map<String, String> data) {
-		this.data = data;
-	}
+public record LoadResponse(Map<String, String> data) {
 
 	public static LoadResponse of(ChessGame chessGame) {
 		var response = chessGame.getBoard().entrySet().stream()
